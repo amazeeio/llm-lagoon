@@ -1,0 +1,6 @@
+docker-compose-yaml: docker-compose.yml
+environments:
+  main:
+    routes:
+      - llama2-api:
+        - llama2.marco-test6.amazeeio.review
