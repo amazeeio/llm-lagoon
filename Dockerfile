@@ -1,10 +1,6 @@
 # Use the image as specified
 FROM python:3-slim-bullseye
-FROM uselagoon/commons as commons
-
 ENV MODEL=vicuna-13B-v1.5-16K-GGML
-
-COPY --from=commons /bin/fix-permissions /bin/ep /bin/
 
 # Update and upgrade the existing packages 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
@@ -28,10 +24,12 @@ WORKDIR /app
 
 COPY ./amazee_server.sh /app/amazee_server.sh
 COPY ./hug_model.py /app/hug_model.py
+COPY ./fix-permissions.sh /app/fix-permissions.sh
+RUN chmod +x /app/fix-permissions.sh
 
 RUN mkdir -p /data \
-    && fix-permissions /data  \
-    && fix-permissions /app
+    && /app/fix-permissions.sh /data  \
+    && /app/fix-permissions.sh /app
 
 # Make the server start script executable
 RUN chmod +x /app/amazee_server.sh
