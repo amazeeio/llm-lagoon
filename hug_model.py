@@ -32,6 +32,10 @@ def check_magic_and_version(filename):
 
     print(f"magic: 0x{magic:08x}, version: 0x{version:04x}, file: {filename}")
 
+    # print the filesize of the moden in GB way and the permissions
+    print(f"File size: {os.path.getsize(filename) / 1024 / 1024 / 1024:.2f} GB")
+    print(f"File permissions: {oct(os.stat(filename).st_mode)[-3:]}")
+
     return magic, version
 
 def download_file(url, destination, params):
