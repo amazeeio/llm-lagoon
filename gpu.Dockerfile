@@ -1,4 +1,4 @@
-ARG CUDA_IMAGE="12.2.0-devel-ubuntu22.04"
+ARG CUDA_IMAGE="12.1.1-devel-ubuntu22.04"
 FROM nvidia/cuda:${CUDA_IMAGE}
 
 # Install the package
