@@ -2,10 +2,19 @@ ARG CUDA_IMAGE="12.2.0-devel-ubuntu22.04"
 FROM nvidia/cuda:${CUDA_IMAGE}
 
 # Install the package
-RUN apt update && apt install -y python3 python3-pip
+RUN apt-get update && apt-get upgrade -y \
+    && apt-get install -y git build-essential \
+    python3 python3-pip gcc wget \
+    ocl-icd-opencl-dev opencl-headers clinfo \
+    libclblast-dev libopenblas-dev \
+    && mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+
+ENV CUDA_DOCKER_ARCH=all
+ENV LLAMA_CUBLAS=1
+
 RUN python3 -m pip install --upgrade pip pytest cmake scikit-build setuptools fastapi uvicorn sse-starlette pydantic-settings requests
 
-RUN LLAMA_CUBLAS=1 pip install llama-cpp-python
+RUN CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python
 
 # Run the server
 ENV MODEL=vicuna-13B-v1.5-16K-GGML
