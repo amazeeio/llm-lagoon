@@ -3,7 +3,7 @@ FROM nvidia/cuda:${CUDA_IMAGE}
 
 # Install the package
 RUN apt update && apt install -y python3 python3-pip
-RUN python3 -m pip install --upgrade pip pytest cmake scikit-build setuptools fastapi uvicorn sse-starlette pydantic-settings
+RUN python3 -m pip install --upgrade pip pytest cmake scikit-build setuptools fastapi uvicorn sse-starlette pydantic-settings requests
 
 RUN LLAMA_CUBLAS=1 pip install llama-cpp-python
 
