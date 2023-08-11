@@ -4,6 +4,14 @@ import os
 import struct
 import argparse
 
+def symlink_model(data_dir, model_path):
+    # Creating a symbolic link from destination to "model.bin"
+    data_dir = '.'
+    model_bin = os.path.join(data_dir, "model.bin")
+    if os.path.isfile(model_bin):
+        os.remove(model_bin)  # remove the existing link if any
+    os.symlink(model_path, model_bin)
+
 def make_request(url, params=None):
     print(f"Making request to {url}...")
     response = requests.get(url, params=params)
@@ -26,7 +34,7 @@ def check_magic_and_version(filename):
 
     return magic, version
 
-def download_file(url, destination):
+def download_file(url, destination, params):
     print(f"Downloading {url} to {destination}...")
     response = requests.get(url, stream=True)
     if response.status_code == 200:
@@ -41,10 +49,7 @@ def download_file(url, destination):
                         total_downloaded = 0
         print("\nDownload complete.")
         
-        # Creating a symbolic link from destination to "model.bin"
-        if os.path.isfile("model.bin"):
-            os.remove("model.bin")  # remove the existing link if any
-        os.symlink(destination, "model.bin")
+        symlink_model(params['datadir'], destination)
     else:
         print(f"Download failed with status code {response.status_code}")
 
@@ -85,7 +90,9 @@ def main():
                         help='HuggingFace search filter')
     parser.add_argument('-f', '--filename', type=str, default='q5_1',
                         help='HuggingFace model repository filename substring match')
-
+    parser.add_argument('-d', '--datadir', type=str, default='/data',
+                        help='Data directory to store HuggingFace models')
+ 
     # Parse the arguments
     args = parser.parse_args()
 
@@ -93,7 +100,8 @@ def main():
     params = {
         "author": args.author,
         "tags": args.tag,
-        "search": args.search
+        "search": args.search,
+        "datadir": args.datadir,
     }
 
     models = make_request('https://huggingface.co/api/models', params=params)
@@ -113,6 +121,7 @@ def main():
             if rfilename and args.filename in rfilename:
                 model_list.append((model_id, rfilename))
 
+    print(f"Found models: {len(model_list)}")
     # Choose the model
     model_list.sort(key=lambda x: x[0])
     if len(model_list) == 0:
@@ -127,7 +136,28 @@ def main():
         model_id, rfilename = model_choice
         url = f"https://huggingface.co/{model_id}/resolve/main/{rfilename}"
         dest = f"{model_id.replace('/', '_')}_{rfilename}"
-        download_file(url, dest)
+
+        print(f"Model ID: {model_id}, RFilename: {rfilename}, destination: {dest}")
+
+        # Download the model to /data directory
+        if not os.path.isdir(params['datadir']):
+            # throw error if data directory does not exist
+            print("Error - data directory does not exist")
+            exit(-1)
+        dest = os.path.join(params['datadir'], dest)
+
+        # check if model is already downloaded
+        if os.path.isfile(dest):
+            print("Model already downloaded.")
+            _, version = check_magic_and_version(dest)
+            if version != args.version:
+                print(f"Warning: Expected version {args.version}, but found different version in the file.")
+
+            # Creating a symbolic link from destination to "model.bin"
+            symlink_model(params['datadir'], dest)
+            exit(0)
+        print(f"Downloading {url} to {dest}...")
+        download_file(url, dest, params)
         _, version = check_magic_and_version(dest)
         if version != args.version:
              print(f"Warning: Expected version {args.version}, but found different version in the file.")

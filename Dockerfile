@@ -3,18 +3,18 @@ FROM python:3-slim-bullseye
 ENV MODEL=vicuna-13B-v1.5-16K-GGML
 
 # Update and upgrade the existing packages 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     python3 \
     python3-pip \
     ninja-build \
+    libopenblas-dev \
     build-essential
 
 RUN python3 -m pip install --upgrade pip pytest cmake scikit-build setuptools fastapi uvicorn sse-starlette pydantic-settings
 
 RUN echo "OpenBLAS install:" && \
-    apt-get install -y --no-install-recommends libopenblas-dev && \
     pip install requests && \
-    LLAMA_OPENBLAS=1 pip install llama-cpp-python --verbose;
+    CMAKE_ARGS="-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS" pip install llama-cpp-python --verbose;
 
 # Clean up apt cache
 RUN rm -rf /var/lib/apt/lists/*
