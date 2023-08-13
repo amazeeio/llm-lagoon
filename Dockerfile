@@ -1,6 +1,6 @@
 # Use the image as specified
 FROM python:3-slim-bullseye
-ENV MODEL=vicuna-13B-v1.5-16K-GGML
+ENV MODEL=WizardLM-13B-V1.2
 
 # Update and upgrade the existing packages 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
