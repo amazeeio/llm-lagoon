@@ -1,5 +1,6 @@
 ARG CUDA_IMAGE="12.1.1-devel-ubuntu22.04"
 FROM nvidia/cuda:${CUDA_IMAGE}
+ENV MODEL=WizardLM-13B-V1.2
 
 # Install the package
 RUN apt-get update && apt-get upgrade -y \
@@ -16,9 +17,6 @@ ENV LLAMA_CUBLAS=1
 RUN python3 -m pip install --upgrade pip pytest cmake scikit-build setuptools fastapi uvicorn sse-starlette pydantic-settings requests
 
 RUN CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python
-
-# Run the server
-ENV MODEL=vicuna-13B-v1.5-16K-GGML
 
 # Set a working directory for better clarity
 WORKDIR /app
