@@ -10,6 +10,7 @@ services:
       - "8000:8000"
     platform: linux/amd64
   ui:
+    user: '10000'
     build:
       context: .
       dockerfile: ui.Dockerfile
