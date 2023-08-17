@@ -1,7 +1,9 @@
 version: '2'
 services:
   llama2-api:
-    build: gpu.Dockerfile
+    build:
+      context: .
+      dockerfile: gpu.Dockerfile
     labels:
       lagoon.type: basic-persistent
       lagoon.persistent: /data
