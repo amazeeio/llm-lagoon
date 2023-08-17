@@ -23,12 +23,9 @@ WORKDIR /app
 
 COPY ./start-llama2.sh /app/start-llama2.sh
 COPY ./hug_model.py /app/hug_model.py
-COPY ./fix-permissions.sh /app/fix-permissions.sh
-RUN chmod +x /app/fix-permissions.sh
 
-RUN mkdir -p /data \
-    && /app/fix-permissions.sh /data
-
+# Tell LLAMA_CPP that we want to offload layers to the GPU
+ENV LLAMA_CPP_ARGS="--n_gpu_layers=43"
 
 # Set environment variable for the host
 ENV HOST=0.0.0.0
