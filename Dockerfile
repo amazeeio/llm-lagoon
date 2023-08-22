@@ -2,7 +2,7 @@
 FROM python:3-slim-bullseye
 ENV MODEL=WizardLM-13B-V1.2
 
-# Update and upgrade the existing packages 
+# Update and upgrade the existing packages
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     python3 \
     python3-pip \
@@ -22,18 +22,8 @@ RUN rm -rf /var/lib/apt/lists/*
 # Set a working directory for better clarity
 WORKDIR /app
 
-COPY ./amazee_server.sh /app/amazee_server.sh
+COPY ./start-llama2.sh /app/start-llama2.sh
 COPY ./hug_model.py /app/hug_model.py
-COPY ./fix-permissions.sh /app/fix-permissions.sh
-RUN chmod +x /app/fix-permissions.sh
-
-RUN mkdir -p /data \
-    && /app/fix-permissions.sh /data  \
-    && /app/fix-permissions.sh /app
-
-# Make the server start script executable
-RUN chmod +x /app/amazee_server.sh
-
 # Set environment variable for the host
 ENV HOST=0.0.0.0
 
@@ -41,4 +31,4 @@ ENV HOST=0.0.0.0
 EXPOSE 8000
 
 # Run the server start script
-CMD ["/bin/sh", "/app/amazee_server.sh"]
+CMD ["/app/start-llama2.sh"]
