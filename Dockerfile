@@ -1,6 +1,29 @@
 # Use the image as specified
-FROM python:3-slim-bullseye
-ENV MODEL=WizardLM-13B-V1.2
+FROM python:3-slim-bookworm
+
+# Model to use
+ENV MODEL=TheBloke/openchat-3.5-0106-GGUF
+
+# Exact filename of the model
+ENV FILENAME=openchat-3.5-0106.Q6_K.gguf
+
+# Chat format
+ENV CHAT_FORMAT=openchat
+
+# Directory to store the model
+ENV DATADIR=/data
+
+# Tell LLAMA_CUBLAS that we want to use cuBLAS
+ENV LLAMA_CUBLAS=1
+
+# Set environment variable for the host
+ENV HOST=0.0.0.0
+
+# Force cmake to run
+ENV FORCE_CMAKE=1
+
+# Set cmake args openblas on
+ENV CMAKE_ARGS="-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS"
 
 # Update and upgrade the existing packages
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
@@ -8,13 +31,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     python3-pip \
     ninja-build \
     libopenblas-dev \
+    pkg-config \
     build-essential
-
-RUN python3 -m pip install --upgrade pip pytest cmake scikit-build setuptools fastapi uvicorn sse-starlette pydantic-settings
-
-RUN echo "OpenBLAS install:" && \
-    pip install requests && \
-    CMAKE_ARGS="-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS" pip install llama-cpp-python --verbose;
 
 # Clean up apt cache
 RUN rm -rf /var/lib/apt/lists/*
@@ -22,13 +40,14 @@ RUN rm -rf /var/lib/apt/lists/*
 # Set a working directory for better clarity
 WORKDIR /app
 
-COPY ./start-llama2.sh /app/start-llama2.sh
+COPY ./requirements.txt /app/requirements.txt
+COPY ./start-llm.sh /app/start-llm.sh
 COPY ./hug_model.py /app/hug_model.py
-# Set environment variable for the host
-ENV HOST=0.0.0.0
+
+RUN pip install -r requirements.txt
 
 # Expose a port for the server
 EXPOSE 8000
 
 # Run the server start script
-CMD ["/app/start-llama2.sh"]
+CMD ["/app/start-llm.sh"]

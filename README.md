@@ -1,7 +1,13 @@
-# lagoon-llama2
-lagoon going llama2
+# LLM Lagoon
+
+lagoon going open source LLMs
 
 # local run on mac M1
+
+Prefer to use the shell script `mac-local.sh` instead of using docker due to the support of using `METAL` GPU when running locally without docker.
+
+Otherwise if you really need to:
+
 ```sh
 docker-compose up -d
 ```
