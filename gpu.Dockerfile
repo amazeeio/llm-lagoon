@@ -7,6 +7,9 @@ ENV MODEL=TheBloke/openchat-3.5-0106-GGUF
 # Exact filename of the model
 ENV FILENAME=openchat-3.5-0106.Q6_K.gguf
 
+# Chat format
+ENV CHAT_FORMAT=openchat
+
 # Directory to store the model
 ENV DATADIR=/data
 
