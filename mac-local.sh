@@ -1,11 +1,11 @@
 # Model to use
-export MODEL=TheBloke/openchat-3.5-0106-GGUF
+export MODEL=Rijgersberg/GEITje-7B-chat-v2-gguf
 
 # Exact filename of the model
-export FILENAME=openchat-3.5-0106.Q6_K.gguf
+export FILENAME=GEITje-7B-chat-v2.gguf
 
 # Chat format to use
-export CHAT_FORMAT=openchat
+export CHAT_FORMAT=zephyr
 
 # Directory to store the model, we use the default HuggingFace cache directory
 export DATADIR=/$HOME/.cache/huggingface/hub

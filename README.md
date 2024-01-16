@@ -19,7 +19,7 @@ curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
      "model": "gpt-3.5-turbo",
-     "messages": [{"role": "user", "content": "What do you think about when nobody is watching?"}],
+     "messages": [{"role": "user", "content": "Waar denk je aan als niemand kijkt?"}],
      "temperature": 0.7,
      "max_tokens": 2000
    }'

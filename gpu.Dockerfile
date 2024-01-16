@@ -2,10 +2,13 @@ ARG CUDA_IMAGE="12.1.1-devel-ubuntu22.04"
 FROM nvidia/cuda:${CUDA_IMAGE}
 
 # Model to use
-ENV MODEL=TheBloke/openchat-3.5-0106-GGUF
+ENV MODEL=Rijgersberg/GEITje-7B-chat-v2-gguf
 
 # Exact filename of the model
-ENV FILENAME=openchat-3.5-0106.Q6_K.gguf
+ENV FILENAME=GEITje-7B-chat-v2.gguf
+
+# Chat format
+ENV CHAT_FORMAT=zephyr
 
 # Directory to store the model
 ENV DATADIR=/data
