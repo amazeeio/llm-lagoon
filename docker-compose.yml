@@ -1,6 +1,6 @@
 version: '2'
 services:
-  llama2-api:
+  llm-api:
     build:
       context: .
       dockerfile: Dockerfile
