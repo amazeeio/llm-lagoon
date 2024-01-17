@@ -6,7 +6,7 @@ echo "Model: ${MODEL}, FILENAME: ${FILENAME}, CHAT_FORMAT: ${CHAT_FORMAT}, LLAMA
 
 # Download model
 echo "Downloading model..."
-python hug_model.py --model "${MODEL}" --filename "${FILENAME}" --datadir "${DATADIR}"
+python3 hug_model.py --model "${MODEL}" --filename "${FILENAME}" --datadir "${DATADIR}"
 
 # Run server
 echo "Running server..."

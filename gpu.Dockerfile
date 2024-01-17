@@ -10,6 +10,9 @@ ENV FILENAME=GEITje-7B-chat-v2.gguf
 # Chat format
 ENV CHAT_FORMAT=zephyr
 
+# Chat format
+ENV CHAT_FORMAT=openchat
+
 # Directory to store the model
 ENV DATADIR=/data
 
