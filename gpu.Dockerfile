@@ -23,7 +23,7 @@ ENV CUDA_DOCKER_ARCH=all
 ENV LLAMA_CUBLAS=1
 
 # Tell LLAMA_CPP that we want to offload layers to the GPU
-ENV LLAMA_CPP_ARGS="--n_gpu_layers=43"
+ENV LLAMA_CPP_ARGS="--n_gpu_layers=32"
 
 # Set environment variable for the host
 ENV HOST=0.0.0.0
