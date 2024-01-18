@@ -1,5 +1,12 @@
-ARG CUDA_IMAGE="12.1.1-devel-ubuntu22.04"
-FROM nvidia/cuda:${CUDA_IMAGE}
+ARG UBUNTU_VERSION=22.04
+
+# This needs to generally match the container host's environment.
+ARG CUDA_VERSION=11.7.1
+
+# Target the CUDA build image
+ARG BASE_CUDA_DEV_CONTAINER=nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}
+
+FROM ${BASE_CUDA_DEV_CONTAINER}
 
 # Model to use
 ENV MODEL=Rijgersberg/GEITje-7B-chat-v2-gguf
@@ -16,10 +23,13 @@ ENV CHAT_FORMAT=openchat
 # Directory to store the model
 ENV DATADIR=/data
 
-# CUDA Docker image architecture
-ENV CUDA_DOCKER_ARCH=all
+# Unless otherwise specified, we make a fat build.
+ARG CUDA_DOCKER_ARCH=all
 
-# Tell LLAMA_CUBLAS that we want to use cuBLAS
+# Set nvcc architecture
+ENV CUDA_DOCKER_ARCH=${CUDA_DOCKER_ARCH}
+
+# Enable cuBLAS
 ENV LLAMA_CUBLAS=1
 
 # Tell LLAMA_CPP that we want to offload layers to the GPU
@@ -28,20 +38,9 @@ ENV LLAMA_CPP_ARGS="--n_gpu_layers=43"
 # Set environment variable for the host
 ENV HOST=0.0.0.0
 
-# Force cmake to run
-ENV FORCE_CMAKE=1
-
-# Set cmake args cublas on
-ENV CMAKE_ARGS="-DLLAMA_CUBLAS=on"
-
 # Install the package
-RUN apt-get update && apt-get upgrade -y \
-    && apt-get install -y git build-essential \
-    python3 python3-pip gcc wget \
-    ocl-icd-opencl-dev opencl-headers clinfo \
-    libclblast-dev libopenblas-dev \
-    && mkdir -p /etc/OpenCL/vendors && echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y build-essential python3 python3-pip git
 
 # Set a working directory for better clarity
 WORKDIR /app
