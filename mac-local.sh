@@ -35,4 +35,4 @@ python hug_model.py --model "${MODEL}" --filename "${FILENAME}" --datadir "${DAT
 
 # run server
 echo "Running server..."
-python3 -B -m llama_cpp.server --model="${DATADIR}/model.bin" --chat_format="${CHAT_FORMAT}" ${LLAMA_CPP_ARGS}
+python3 -B -m llama_cpp.server --n_ctx="${N_CTX}" --model="${DATADIR}/model.bin" --chat_format="${CHAT_FORMAT}" ${LLAMA_CPP_ARGS}

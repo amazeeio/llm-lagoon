@@ -7,6 +7,9 @@ ENV MODEL=Rijgersberg/GEITje-7B-chat-v2-gguf
 # Exact filename of the model
 ENV FILENAME=GEITje-7B-chat-v2.gguf
 
+# Exact filename of the model
+ENV N_CTX=8096
+
 # Chat format
 ENV CHAT_FORMAT=zephyr
 
