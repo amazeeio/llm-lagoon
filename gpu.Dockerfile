@@ -5,7 +5,7 @@ FROM nvidia/cuda:${CUDA_IMAGE}
 ENV MODEL=TheBloke/openchat-3.5-0106-GGUF
 
 # Exact filename of the model
-ENV FILENAME=openchat-3.5-0106.Q8_0.gguf
+ENV FILENAME=openchat_3.5.Q8_0.gguf
 
 # Exact filename of the model
 ENV N_CTX=8096
