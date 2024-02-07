@@ -2,19 +2,16 @@ ARG CUDA_IMAGE="12.1.1-devel-ubuntu22.04"
 FROM nvidia/cuda:${CUDA_IMAGE}
 
 # Model to use
-ENV MODEL=Rijgersberg/GEITje-7B-chat-v2-gguf
+ENV MODEL=TheBloke/OpenHermes-2.5-Mistral-7B-GGUF
 
 # Exact filename of the model
-ENV FILENAME=GEITje-7B-chat-v2.gguf
+ENV FILENAME=openhermes-2.5-mistral-7b.Q8_0.gguf
 
 # Exact filename of the model
 ENV N_CTX=8096
 
 # Chat format
-ENV CHAT_FORMAT=zephyr
-
-# Chat format
-ENV CHAT_FORMAT=openchat
+ENV CHAT_FORMAT=chatml
 
 # Directory to store the model
 ENV DATADIR=/data
