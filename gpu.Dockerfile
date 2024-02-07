@@ -2,16 +2,16 @@ ARG CUDA_IMAGE="12.1.1-devel-ubuntu22.04"
 FROM nvidia/cuda:${CUDA_IMAGE}
 
 # Model to use
-ENV MODEL=TheBloke/OpenHermes-2.5-Mistral-7B-GGUF
+ENV MODEL=TheBloke/openchat-3.5-0106-GGUF
 
 # Exact filename of the model
-ENV FILENAME=openhermes-2.5-mistral-7b.Q8_0.gguf
+ENV FILENAME=openchat-3.5-0106.Q8_0.gguf
 
 # Exact filename of the model
 ENV N_CTX=8096
 
 # Chat format
-ENV CHAT_FORMAT=chatml
+ENV CHAT_FORMAT=openchat
 
 # Directory to store the model
 ENV DATADIR=/data
@@ -23,7 +23,7 @@ ENV CUDA_DOCKER_ARCH=all
 ENV LLAMA_CUBLAS=1
 
 # Tell LLAMA_CPP that we want to offload layers to the GPU
-ENV LLAMA_CPP_ARGS="--n_gpu_layers=32"
+ENV LLAMA_CPP_ARGS="--n_gpu_layers=-1"
 
 # Set environment variable for the host
 ENV HOST=0.0.0.0
