@@ -2,13 +2,16 @@
 FROM python:3-slim-bookworm
 
 # Model to use
-ENV MODEL=Rijgersberg/GEITje-7B-chat-v2-gguf
+ENV MODEL=QuantFactory/Meta-Llama-3-8B-Instruct-GGUF
 
 # Exact filename of the model
-ENV FILENAME=GEITje-7B-chat-v2.gguf
+ENV FILENAME=Meta-Llama-3-8B-Instruct.Q8_0.gguf
+
+# Exact filename of the model
+ENV N_CTX=8096
 
 # Chat format
-ENV CHAT_FORMAT=zephyr
+ENV CHAT_FORMAT=llama-3
 
 # Directory to store the model
 ENV DATADIR=/data

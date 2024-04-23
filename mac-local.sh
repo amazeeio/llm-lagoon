@@ -1,20 +1,26 @@
 # Model to use
-export MODEL=Rijgersberg/GEITje-7B-chat-v2-gguf
+export MODEL=QuantFactory/Meta-Llama-3-8B-Instruct-GGUF
 
 # Exact filename of the model
-export FILENAME=GEITje-7B-chat-v2.gguf
+export FILENAME=Meta-Llama-3-8B-Instruct.Q8_0.gguf
 
 # Chat format to use
-export CHAT_FORMAT=zephyr
+export CHAT_FORMAT=llama-3
 
 # Directory to store the model, we use the default HuggingFace cache directory
 export DATADIR=/$HOME/.cache/huggingface/hub
 
-# Tell LLAMA_CUBLAS that we want to use cuBLAS
-export LLAMA_CUBLAS=1
+# Use Metal llama-cpp backend
+export CMAKE_ARGS="-DLLAMA_METAL=on"
 
 # Set environment variable for the host
 export HOST=0.0.0.0
+
+# Set the context window size
+export N_CTX=8096
+
+# Tell LLAMA_CPP that we want to offload layers to the GPU
+export LLAMA_CPP_ARGS="--n_gpu_layers=-1"
 
 # check if data directory exists
 if [ ! -d "${DATADIR}" ]; then
@@ -35,4 +41,4 @@ python hug_model.py --model "${MODEL}" --filename "${FILENAME}" --datadir "${DAT
 
 # run server
 echo "Running server..."
-python3 -B -m llama_cpp.server --n_ctx="${N_CTX}" --model="${DATADIR}/model.bin" --chat_format="${CHAT_FORMAT}" ${LLAMA_CPP_ARGS}
+python3 -B -m llama_cpp.server --n_gpu_layers=-1 --n_ctx="${N_CTX}" --model="${DATADIR}/model.bin" --chat_format="${CHAT_FORMAT}" ${LLAMA_CPP_ARGS}
