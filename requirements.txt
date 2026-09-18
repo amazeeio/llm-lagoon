@@ -1,4 +1,4 @@
-anyio==3.7.1
+anyio==4.14.2
 cmake==3.28.1
 huggingface-hub==0.20.2
 llama_cpp_python==0.2.28
